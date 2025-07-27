@@ -20,13 +20,13 @@ const Theme = () => {
     }
 
     return (
-        <button onClick={toggleTheme} className='dark:text-neutral-100 text-neutral-800 text-lg w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-800/80 flex items-center justify-center'>
+        <button onClick={toggleTheme} className='dark:text-neutral-100 text-neutral-800 text-lg w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-800/80 hover:bg-neutral-300 dark:hover:bg-neutral-700 flex items-center justify-center transition-all duration-300 hover:scale-110'>
             {
                 theme === 'dark'
                     ?
-                    <FaMoon />
+                    <FaMoon className="transition-transform duration-300" />
                     :
-                    <FaSun />
+                    <FaSun className="transition-transform duration-300" />
             }
         </button>
     )

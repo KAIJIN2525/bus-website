@@ -28,7 +28,7 @@ const Bus = () => {
   return (
     <div className='w-full lg:px-28 md:px-16 sm:px-7 px-4 mt-[13ch] mb-[8ch] space-y-14'>
         {/* Search and Filter */}
-        <div className='w-full grid grid-cols-6 gap-14 bg-neutral-200/60 dark:bg-neutral-900/40 rounded-md px-6 py-5 items-center justify-between'>
+        <div className='w-full grid grid-cols-6 gap-14 bg-white dark:bg-neutral-900/60 rounded-2xl px-8 py-6 items-center justify-between shadow-xl border border-neutral-200/50 dark:border-neutral-800/50'>
             <div className='flex items-center gap-x-2 col-span-2'>
                 <input 
                     type="text" 
@@ -37,8 +37,8 @@ const Bus = () => {
                     name='seat'
                     value={searchTerm}
                     onChange={handleSearch} 
-                    className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 inline-block bg-neutral-900/10 dark:bg-neutral-900/60 px-3 h-12 border border-neutral-200 dark:border-neutral-900 rounded-md focus:outline-none focus:bg-neutral-100 dark:focus:bg-neutral-900" />
-                <button className='bg-violet-600 h-11 px-4 rounded-md text-base text-neutral-50 font-normal'>
+                    className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 inline-block bg-neutral-50 dark:bg-neutral-800/60 px-4 h-12 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300" />
+                <button className='bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-700 hover:to-violet-800 h-12 px-5 rounded-xl text-base text-neutral-50 font-medium transition-all duration-300 shadow-md hover:shadow-lg'>
                     <FaSearch />
                 </button>
             </div>
@@ -49,7 +49,7 @@ const Bus = () => {
 
             <div className="col-span-2">
                 <select 
-                    className='w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 inline-block bg-neutral-900/10 dark:bg-neutral-900/60 px-3 h-12 border border-neutral-200 dark:border-neutral-900 rounded-md focus:outline-none focus:bg-neutral-100 dark:focus:bg-neutral-900'
+                    className='w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 inline-block bg-neutral-50 dark:bg-neutral-800/60 px-4 h-12 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300'
                     value={selectedCategory}
                     onChange={handleCategoryChange}
                 >
@@ -63,20 +63,20 @@ const Bus = () => {
         </div>
 
         {/* Bus Cards  */}
-        <div className="w-full grid grid-cols-3 gap-10">
+        <div className="w-full grid grid-cols-3 gap-8">
             {filterBuses.length > 0 ? (
                 filterBuses.map(bus => (
                     <Link
                       key={bus.id} 
                       to={`/bus/bus-details/${bus.id}`} 
-                      className='w-full bg-neutral-200/60 block dark:bg-neutral-900/40 rounded-xl p-4'>
-                        <img src={bus.image} alt="bus img" className='w-full aspect-video object-contain object-center'/>
-                        <div className="px-3 py-4 space-y-2">
+                      className='w-full bg-white block dark:bg-neutral-900/60 rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-neutral-200/50 dark:border-neutral-800/50 transition-all duration-300 transform hover:scale-105 group'>
+                        <img src={bus.image} alt="bus img" className='w-full aspect-video object-contain object-center transition-transform duration-300 group-hover:scale-110'/>
+                        <div className="px-2 py-4 space-y-3">
                             <div className="flex items-center justify-between">
-                                <h1 className="text-xl font-semibold text-neutral-800 dark:text-neutral-50">
+                                <h1 className="text-xl font-bold text-neutral-800 dark:text-neutral-50 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors duration-300">
                                     {bus.name}
                                 </h1>
-                                <p className="text-sm font-normal text-neutral-800 dark:text-neutral-50">
+                                <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-800 px-3 py-1 rounded-full">
                                     {bus.passengers} passengers
                                 </p>
                             </div>
@@ -84,7 +84,7 @@ const Bus = () => {
                     </Link>
                 ))
             ) : (
-                <p className="text-xl text-neutral-800 dark:text-neutral-100">
+                <p className="text-xl text-neutral-800 dark:text-neutral-100 col-span-3 text-center py-12">
                     No buses matches your search
                 </p>
             )}
