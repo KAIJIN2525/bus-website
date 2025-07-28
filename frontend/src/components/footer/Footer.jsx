@@ -7,8 +7,8 @@ import Logo from "../../assets/logo.png";
 const Footer = () => {
   return (
     <footer className="w-full lg:px-28 md:px-16 sm:px-7 px-4 py-12 bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-900 dark:to-neutral-950 border-t border-neutral-200/50 dark:border-neutral-800/50">
-      <div className="grid grid-cols-5 gap-5">
-        <div className="space-y-5 col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
+        <div className="space-y-5 lg:col-span-2">
           <Link
             to="/"
             className="text-xl text-neutral-800 dark:text-neutral-200 font-bold"
@@ -20,13 +20,10 @@ const Footer = () => {
             />
           </Link>
           <p className="text-neutral-600 dark:text-neutral-400 text-base font-normal pr-10 leading-relaxed">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam
-            placeat corporis, rerum laborum optio laboriosam perferendis sit
-            culpa doloribus, tempora aliquam repellendus reprehenderit, ullam
-            alias.
+            Book your bus tickets easily and securely. Enjoy safe, comfortable,
+            and affordable travel with us.
           </p>
         </div>
-
         <div className="space-y-7">
           <h1 className="text-lg font-bold text-neutral-800 dark:text-neutral-200">
             About Us
@@ -66,7 +63,6 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-
         <div className="space-y-7">
           <h1 className="text-lg font-bold text-neutral-800 dark:text-neutral-200">
             Services
@@ -106,7 +102,6 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-
         <div className="space-y-7">
           <h1 className="text-lg font-bold text-neutral-800 dark:text-neutral-200">
             Get In Touch
@@ -152,7 +147,7 @@ const Footer = () => {
       </div>
 
       <div className="mt-12 pt-8 border-t border-neutral-300 dark:border-neutral-700">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
             © 2025 Bus Ticket Booking. All rights reserved.
           </p>
