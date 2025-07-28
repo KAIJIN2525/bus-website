@@ -1,49 +1,65 @@
-/*  */
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Inter", sans-serif;
+.hero {
+  background-image: linear-gradient(135deg, rgba(139, 69, 19, 0.9) 0%, rgba(75, 0, 130, 0.8) 50%, rgba(25, 25, 112, 0.9) 100%), url("./assets/bg1.jpg");
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  -moz-background-size: cover;
 }
 
-/* Custom Scrollbar */
+/* Enhanced scrollbar for better UX */
 ::-webkit-scrollbar {
-  width: 8px;
-  background: #f9fafb;
+  width: 10px;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f3f4f6;
-  border-radius: 8px;
+  background: #e2e8f0;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cacaca;
-  border-radius: 8px;
-  transition: all 0.5s ease-out;
+  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a4a4a4;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
 }
 
-.hero{
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.05)), url("./assets/bg1.jpg");
-  background-size: cover;
-  background-position: center bottom;
-  background-repeat: no-repeat; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -moz-background-size: cover;
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar {
+  background: #1e293b;
 }
 
+.dark ::-webkit-scrollbar-track {
+  background: #334155;
+}
 
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+}
 
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Focus styles for better accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}

@@ -1,18 +1,25 @@
 import React, { useState } from "react";
+import {
+  FaSearch,
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaClock,
+  FaUsers,
+} from "react-icons/fa";
 
 const locationsFrom = [
-  "Location 1",
-  "Location 2",
-  "Location 3",
-  "Location 4",
-  "Location 5",
+  "New York, NY",
+  "Los Angeles, CA",
+  "Chicago, IL",
+  "Houston, TX",
+  "Phoenix, AZ",
 ];
 const locationsTo = [
-  "Location 6",
-  "Location 7",
-  "Location 8",
-  "Location 9",
-  "Location 10",
+  "Miami, FL",
+  "Seattle, WA",
+  "Boston, MA",
+  "Denver, CO",
+  "Atlanta, GA",
 ];
 
 const Search = () => {
@@ -33,7 +40,7 @@ const Search = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.from || !form.to || !form.date || !form.time || !form.seat) {
-      setError("Please fill in all fields.");
+      setError("Please fill in all fields to search for available buses.");
       return;
     }
     // TODO: Add search logic or API call here
@@ -41,12 +48,25 @@ const Search = () => {
   };
 
   return (
-    <div className="w-full lg:px-28 md:px-16 sm:px-7 px-4 my-[8ch]">
-      <div className="w-full bg-neutral-100 rounded-md dark:bg-neutral-900/40 p-8 shadow-lg">
+    <div className="w-full lg:px-28 md:px-16 sm:px-7 px-4 -mt-16 relative z-20">
+      <div className="w-full bg-white dark:bg-neutral-900 rounded-2xl p-8 shadow-2xl border border-neutral-200/50 dark:border-neutral-800/50 backdrop-blur-sm">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100 mb-2">
+            Find Your Perfect Journey
+          </h2>
+          <p className="text-neutral-600 dark:text-neutral-400">
+            Search and compare bus routes across the country
+          </p>
+        </div>
+
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 items-end">
-            <div>
-              <label htmlFor="from" className="block mb-2 font-medium">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 items-end">
+            <div className="lg:col-span-1">
+              <label
+                htmlFor="from"
+                className="flex items-center gap-2 mb-3 font-semibold text-neutral-700 dark:text-neutral-300"
+              >
+                <FaMapMarkerAlt className="text-violet-600 text-sm" />
                 From
               </label>
               <select
@@ -54,9 +74,9 @@ const Search = () => {
                 id="from"
                 value={form.from}
                 onChange={handleChange}
-                className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-900/10 dark:bg-neutral-900/60 px-3 h-12 border border-neutral-200 dark:border-neutral-900 rounded-md focus:outline-none focus:bg-neutral-100 dark:focus:bg-neutral-900"
+                className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-50 dark:bg-neutral-800/60 px-4 h-14 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300 shadow-sm hover:shadow-md"
               >
-                <option value="">Select Location</option>
+                <option value="">Select departure city</option>
                 {locationsFrom.map((loc) => (
                   <option key={loc} value={loc}>
                     {loc}
@@ -64,8 +84,13 @@ const Search = () => {
                 ))}
               </select>
             </div>
-            <div>
-              <label htmlFor="to" className="block mb-2 font-medium">
+
+            <div className="lg:col-span-1">
+              <label
+                htmlFor="to"
+                className="flex items-center gap-2 mb-3 font-semibold text-neutral-700 dark:text-neutral-300"
+              >
+                <FaMapMarkerAlt className="text-violet-600 text-sm" />
                 To
               </label>
               <select
@@ -73,9 +98,9 @@ const Search = () => {
                 id="to"
                 value={form.to}
                 onChange={handleChange}
-                className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-900/10 dark:bg-neutral-900/60 px-3 h-12 border border-neutral-200 dark:border-neutral-900 rounded-md focus:outline-none focus:bg-neutral-100 dark:focus:bg-neutral-900"
+                className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-50 dark:bg-neutral-800/60 px-4 h-14 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300 shadow-sm hover:shadow-md"
               >
-                <option value="">Select Location</option>
+                <option value="">Select destination city</option>
                 {locationsTo.map((loc) => (
                   <option key={loc} value={loc}>
                     {loc}
@@ -83,9 +108,14 @@ const Search = () => {
                 ))}
               </select>
             </div>
-            <div>
-              <label htmlFor="date" className="block mb-2 font-medium">
-                Choose Date
+
+            <div className="lg:col-span-1">
+              <label
+                htmlFor="date"
+                className="flex items-center gap-2 mb-3 font-semibold text-neutral-700 dark:text-neutral-300"
+              >
+                <FaCalendarAlt className="text-violet-600 text-sm" />
+                Departure Date
               </label>
               <input
                 type="date"
@@ -93,48 +123,103 @@ const Search = () => {
                 name="date"
                 value={form.date}
                 onChange={handleChange}
-                className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-900/10 dark:bg-neutral-900/60 px-3 h-12 border border-neutral-200 dark:border-neutral-900 rounded-md focus:outline-none focus:bg-neutral-100 dark:focus:bg-neutral-900"
+                min={new Date().toISOString().split("T")[0]}
+                className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-50 dark:bg-neutral-800/60 px-4 h-14 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300 shadow-sm hover:shadow-md"
               />
             </div>
-            <div>
-              <label htmlFor="time" className="block mb-2 font-medium">
-                Choose Time
+
+            <div className="lg:col-span-1">
+              <label
+                htmlFor="time"
+                className="flex items-center gap-2 mb-3 font-semibold text-neutral-700 dark:text-neutral-300"
+              >
+                <FaClock className="text-violet-600 text-sm" />
+                Preferred Time
               </label>
-              <input
-                type="time"
-                id="time"
+              <select
                 name="time"
+                id="time"
                 value={form.time}
                 onChange={handleChange}
-                className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-900/10 dark:bg-neutral-900/60 px-3 h-12 border border-neutral-200 dark:border-neutral-900 rounded-md focus:outline-none focus:bg-neutral-100 dark:focus:bg-neutral-900"
-              />
+                className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-50 dark:bg-neutral-800/60 px-4 h-14 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300 shadow-sm hover:shadow-md"
+              >
+                <option value="">Any time</option>
+                <option value="morning">Morning (6AM - 12PM)</option>
+                <option value="afternoon">Afternoon (12PM - 6PM)</option>
+                <option value="evening">Evening (6PM - 12AM)</option>
+                <option value="night">Night (12AM - 6AM)</option>
+              </select>
             </div>
-            <div>
-              <label htmlFor="seat" className="block mb-2 font-medium">
-                Total Seat
+
+            <div className="lg:col-span-1">
+              <label
+                htmlFor="seat"
+                className="flex items-center gap-2 mb-3 font-semibold text-neutral-700 dark:text-neutral-300"
+              >
+                <FaUsers className="text-violet-600 text-sm" />
+                Passengers
               </label>
               <input
                 type="number"
                 id="seat"
                 name="seat"
                 min="1"
+                max="10"
                 value={form.seat}
                 onChange={handleChange}
-                placeholder="Enter seat"
-                className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-900/10 dark:bg-neutral-900/60 px-3 h-12 border border-neutral-200 dark:border-neutral-900 rounded-md focus:outline-none focus:bg-neutral-100 dark:focus:bg-neutral-900"
+                placeholder="How many?"
+                className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-50 dark:bg-neutral-800/60 px-4 h-14 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300 shadow-sm hover:shadow-md"
               />
             </div>
-            <div className="flex flex-col gap-2">
+
+            <div className="lg:col-span-1 flex flex-col gap-2">
               <button
                 type="submit"
-                className="w-full px-4 h-12 bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-700 hover:to-violet-800 text-neutral-50 text-base font-semibold rounded-md shadow-md transition-all duration-300"
+                className="w-full px-6 h-14 bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-700 hover:to-violet-800 text-white text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3"
               >
-                Check Availability
+                <FaSearch className="text-sm" />
+                Search Buses
               </button>
-              {error && <span className="text-red-500 text-sm">{error}</span>}
+              {error && (
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                  <span className="text-red-600 dark:text-red-400 text-sm font-medium">
+                    {error}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </form>
+
+        {/* Quick Search Options */}
+        <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-700">
+          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-4">
+            Popular Routes:
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {[
+              "New York → Miami",
+              "Los Angeles → Seattle",
+              "Chicago → Denver",
+              "Houston → Atlanta",
+            ].map((route, index) => (
+              <button
+                key={index}
+                className="px-4 py-2 bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 rounded-full text-sm font-medium hover:bg-violet-100 dark:hover:bg-violet-900/30 transition-colors duration-300"
+                onClick={() => {
+                  const [from, to] = route.split(" → ");
+                  setForm((prev) => ({
+                    ...prev,
+                    from: from + ", NY",
+                    to: to + ", FL",
+                  }));
+                }}
+              >
+                {route}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
