@@ -13,12 +13,16 @@ import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import Profile from "./pages/Profile/Profile";
 import Contact from "./pages/Contact/Contact";
+import FeaturedRoutes from "./pages/FeaturedRoutes/FeaturedRoutes";
+import PopularRoutes from "./pages/PopularRoutes/PopularRoutes";
+import Offers from "./pages/Offers/Offers";
+import RouteDetails from "./pages/RouteDetails/RouteDetails";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="w-full min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-300 flex flex-col">
+        <div className="w-full min-h-screen bg-gradient-to-br from-green-50/50 via-blue-50/50 to-purple-50/50 dark:bg-gradient-to-br dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 text-neutral-800 dark:text-neutral-300 flex flex-col">
           {/* Navbar */}
           <Navbar />
           {/* Main Content */}
@@ -28,6 +32,10 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/bus" element={<Bus />} />
               <Route path="/bus/bus-details/:id" element={<Details />} />
+              <Route path="/featured-routes" element={<FeaturedRoutes />} />
+              <Route path="/popular-routes" element={<PopularRoutes />} />
+              <Route path="/offers" element={<Offers />} />
+              <Route path="/route-details/:id" element={<RouteDetails />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
