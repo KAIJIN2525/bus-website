@@ -13,8 +13,7 @@ import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import Profile from "./pages/Profile/Profile";
 import Contact from "./pages/Contact/Contact";
-import FeaturedRoutes from "./pages/FeaturedRoutes/FeaturedRoutes";
-import PopularRoutes from "./pages/PopularRoutes/PopularRoutes";
+import AllRoutes from "./pages/AllRoutes/AllRoutes";
 import Offers from "./pages/Offers/Offers";
 import RouteDetails from "./pages/RouteDetails/RouteDetails";
 
@@ -32,8 +31,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/bus" element={<Bus />} />
               <Route path="/bus/bus-details/:id" element={<Details />} />
-              <Route path="/featured-routes" element={<FeaturedRoutes />} />
-              <Route path="/popular-routes" element={<PopularRoutes />} />
+              <Route path="/all-routes" element={<AllRoutes />} />
               <Route path="/offers" element={<Offers />} />
               <Route path="/route-details/:id" element={<RouteDetails />} />
               <Route path="/contact" element={<Contact />} />

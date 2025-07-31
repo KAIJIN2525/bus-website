@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaMapMarkerAlt, FaClock, FaUsers, FaStar, FaArrowRight, FaWifi, FaSnowflake, FaShieldAlt, FaPhone, FaCalendarAlt } from 'react-icons/fa';
-import { featuredRoutes, popularRoutes, nigerianBuses, nigerianBusCompanies, formatNairaPrice, pickupPoints } from '../../data/nigerianBusData';
+import { allRoutes, companyBuses, companyInfo, formatNairaPrice, getRandomTerminals } from '../../data/nigerianBusData';
 
 const RouteDetails = () => {
   const { id } = useParams();
@@ -11,19 +11,14 @@ const RouteDetails = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Find route in both featured and popular routes
-    const allRoutes = [...featuredRoutes, ...popularRoutes];
+    // Find route in all routes
     const foundRoute = allRoutes.find(r => r.id === parseInt(id));
     
     if (foundRoute) {
       setRoute(foundRoute);
       
-      // Find buses that serve this route
-      const routeString = `${foundRoute.from}-${foundRoute.to}`;
-      const buses = nigerianBuses.filter(bus => 
-        bus.routes.some(busRoute => busRoute.includes(foundRoute.from) && busRoute.includes(foundRoute.to))
-      );
-      setAvailableBuses(buses);
+      // All buses are available for all routes in a single company
+      setAvailableBuses(companyBuses);
     }
     
     setLoading(false);
@@ -32,7 +27,7 @@ const RouteDetails = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-violet-600"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-600"></div>
       </div>
     );
   }
@@ -44,7 +39,7 @@ const RouteDetails = () => {
           <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100 mb-4">
             Route Not Found
           </h2>
-          <Link to="/featured-routes" className="text-violet-600 hover:text-violet-700">
+          <Link to="/all-routes" className="text-green-600 hover:text-green-700">
             Browse Available Routes
           </Link>
         </div>
@@ -52,8 +47,8 @@ const RouteDetails = () => {
     );
   }
 
-  const fromPickups = pickupPoints[route.from.toLowerCase().replace(' ', '-')] || [];
-  const toPickups = pickupPoints[route.to.toLowerCase().replace(' ', '-')] || [];
+  const fromTerminals = getRandomTerminals(route.from.toLowerCase().replace(' ', '-'), 2);
+  const toTerminals = getRandomTerminals(route.to.toLowerCase().replace(' ', '-'), 2);
 
   return (
     <div className="w-full mt-20 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-neutral-900 dark:via-neutral-900 dark:to-neutral-800">
@@ -72,7 +67,7 @@ const RouteDetails = () => {
               <div className="text-4xl font-bold">{route.from}</div>
               <FaArrowRight className="text-2xl text-blue-400" />
               <div className="text-4xl font-bold">{route.to}</div>
-              <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold ml-4">
+              <div className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold ml-4">
                 {route.popularity}% Popular
               </div>
             </div>
@@ -146,28 +141,19 @@ const RouteDetails = () => {
                 </div>
               </div>
 
-              {/* Companies */}
+              {/* Company Info */}
               <div>
-                <h3 className="font-semibold text-neutral-700 dark:text-neutral-300 mb-3">Available Bus Companies</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {route.companies.map((companyName, idx) => {
-                    const company = nigerianBusCompanies.find(c => c.name === companyName);
-                    return (
-                      <div key={idx} className="flex items-center gap-3 p-3 bg-neutral-50 dark:bg-neutral-800/60 rounded-lg">
-                        <img
-                          src={company?.logo || 'https://images.pexels.com/photos/1098365/pexels-photo-1098365.jpeg?auto=compress&cs=tinysrgb&w=100&h=50&fit=crop'}
-                          alt={companyName}
-                          className="w-12 h-6 object-cover rounded"
-                        />
-                        <div>
-                          <div className="font-medium text-neutral-800 dark:text-neutral-100">{companyName}</div>
-                          <div className="text-xs text-neutral-600 dark:text-neutral-400">
-                            {company?.rating ? `${company.rating}★` : 'Rated service'}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                <h3 className="font-semibold text-neutral-700 dark:text-neutral-300 mb-3">Service Provider</h3>
+                <div className="flex items-center gap-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div className="w-16 h-8 bg-green-600 rounded flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">{companyInfo.shortName}</span>
+                  </div>
+                  <div>
+                    <div className="font-bold text-neutral-800 dark:text-neutral-100">{companyInfo.name}</div>
+                    <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                      {companyInfo.rating}★ • Established {companyInfo.established}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -191,79 +177,76 @@ const RouteDetails = () => {
               </div>
 
               <div className="space-y-4">
-                {availableBuses.map((bus) => {
-                  const company = nigerianBusCompanies.find(c => c.id === bus.companyId);
-                  return (
-                    <div
-                      key={bus.id}
-                      className="border border-neutral-200 dark:border-neutral-700 rounded-xl p-6 hover:shadow-lg transition-all duration-300"
-                    >
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-4">
-                          <img
-                            src={bus.image}
-                            alt={bus.name}
-                            className="w-16 h-12 object-cover rounded-lg"
-                          />
-                          <div>
-                            <h3 className="text-lg font-bold text-neutral-800 dark:text-neutral-100">
-                              {bus.name}
-                            </h3>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                              {bus.company} • {bus.category}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                            {formatNairaPrice(bus.priceRange.min)}
-                          </div>
-                          <div className="text-sm text-neutral-500 dark:text-neutral-400">
-                            Starting from
-                          </div>
+                {availableBuses.map((bus) => (
+                  <div
+                    key={bus.id}
+                    className="border border-neutral-200 dark:border-neutral-700 rounded-xl p-6 hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-4">
+                        <img
+                          src={bus.image}
+                          alt={bus.name}
+                          className="w-16 h-12 object-cover rounded-lg"
+                        />
+                        <div>
+                          <h3 className="text-lg font-bold text-neutral-800 dark:text-neutral-100">
+                            {bus.name}
+                          </h3>
+                          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                            {companyInfo.name} • {bus.category}
+                          </p>
                         </div>
                       </div>
-
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                        <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-                          <FaUsers className="text-blue-500" />
-                          <span>{bus.passengers} seats</span>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                          {formatNairaPrice(bus.priceRange.min)}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-                          <FaStar className="text-yellow-500" />
-                          <span>{bus.rating}</span>
+                        <div className="text-sm text-neutral-500 dark:text-neutral-400">
+                          Starting from
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-                          <FaWifi className="text-green-500" />
-                          <span>WiFi</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-                          <FaSnowflake className="text-blue-500" />
-                          <span>AC</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex flex-wrap gap-2">
-                          {bus.features.slice(0, 3).map((feature, idx) => (
-                            <span
-                              key={idx}
-                              className="text-xs bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 px-2 py-1 rounded-full"
-                            >
-                              {feature}
-                            </span>
-                          ))}
-                        </div>
-                        <Link
-                          to={`/bus/bus-details/${bus.id}`}
-                          className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg"
-                        >
-                          Select Bus
-                        </Link>
                       </div>
                     </div>
-                  );
-                })}
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                      <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+                        <FaUsers className="text-blue-500" />
+                        <span>{bus.passengers} seats</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+                        <FaStar className="text-yellow-500" />
+                        <span>{bus.rating}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+                        <FaWifi className="text-green-500" />
+                        <span>WiFi</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+                        <FaSnowflake className="text-blue-500" />
+                        <span>AC</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap gap-2">
+                        {bus.features.slice(0, 3).map((feature, idx) => (
+                          <span
+                            key={idx}
+                            className="text-xs bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 px-2 py-1 rounded-full"
+                          >
+                            {feature}
+                          </span>
+                        ))}
+                      </div>
+                      <Link
+                        to={`/bus/bus-details/${bus.id}`}
+                        className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold py-2 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg"
+                      >
+                        Select Bus
+                      </Link>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -290,26 +273,26 @@ const RouteDetails = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-neutral-600 dark:text-neutral-400">Price Range</span>
-                  <span className="font-semibold text-blue-600 dark:text-blue-400">
+                  <span className="font-semibold text-green-600 dark:text-green-400">
                     {formatNairaPrice(route.price.min)} - {formatNairaPrice(route.price.max)}
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Pickup Points */}
+            {/* Terminals */}
             <div className="bg-white dark:bg-neutral-900/80 rounded-2xl shadow-xl border border-neutral-200/50 dark:border-neutral-800/50 p-6">
               <h3 className="text-lg font-bold text-neutral-800 dark:text-neutral-100 mb-4">
-                Pickup Points
+                Terminals
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
                   <h4 className="font-semibold text-neutral-700 dark:text-neutral-300 mb-2">{route.from}</h4>
                   <div className="space-y-2">
-                    {fromPickups.slice(0, 3).map((pickup, idx) => (
+                    {fromTerminals.map((terminal, idx) => (
                       <div key={idx} className="text-sm">
-                        <div className="font-medium text-neutral-800 dark:text-neutral-100">{pickup.name}</div>
-                        <div className="text-neutral-600 dark:text-neutral-400">{pickup.landmark}</div>
+                        <div className="font-medium text-neutral-800 dark:text-neutral-100">{terminal.name}</div>
+                        <div className="text-neutral-600 dark:text-neutral-400">{terminal.address}</div>
                       </div>
                     ))}
                   </div>
@@ -317,10 +300,10 @@ const RouteDetails = () => {
                 <div>
                   <h4 className="font-semibold text-neutral-700 dark:text-neutral-300 mb-2">{route.to}</h4>
                   <div className="space-y-2">
-                    {toPickups.slice(0, 3).map((pickup, idx) => (
+                    {toTerminals.map((terminal, idx) => (
                       <div key={idx} className="text-sm">
-                        <div className="font-medium text-neutral-800 dark:text-neutral-100">{pickup.name}</div>
-                        <div className="text-neutral-600 dark:text-neutral-400">{pickup.landmark}</div>
+                        <div className="font-medium text-neutral-800 dark:text-neutral-100">{terminal.name}</div>
+                        <div className="text-neutral-600 dark:text-neutral-400">{terminal.address}</div>
                       </div>
                     ))}
                   </div>
@@ -329,14 +312,14 @@ const RouteDetails = () => {
             </div>
 
             {/* Contact Support */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl p-6">
+            <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-2xl p-6">
               <h3 className="text-lg font-bold mb-4">Need Help?</h3>
-              <p className="text-blue-100 mb-4 text-sm">
+              <p className="text-green-100 mb-4 text-sm">
                 Our customer support team is available 24/7 to assist you with your booking.
               </p>
               <button className="flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 w-full justify-center">
                 <FaPhone className="text-sm" />
-                Call Support
+                {companyInfo.contact.phone}
               </button>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaCopy, FaGift, FaPercent, FaUsers, FaClock, FaGraduationCap, FaBriefcase, FaCalendarAlt, FaCheck, FaTimes } from 'react-icons/fa';
-import { nigerianOffers, formatNairaPrice } from '../../data/nigerianBusData';
+import { companyOffers, formatNairaPrice } from '../../data/nigerianBusData';
 
 const Offers = () => {
   const [copied, setCopied] = useState({});
@@ -34,7 +34,7 @@ const Offers = () => {
     return 'violet';
   };
 
-  const filteredOffers = nigerianOffers.filter(offer => {
+  const filteredOffers = companyOffers.filter(offer => {
     if (filterBy === 'all') return true;
     if (filterBy === 'high-discount') return parseInt(offer.discount) >= 30;
     if (filterBy === 'student') return offer.title.toLowerCase().includes('student');
@@ -56,7 +56,7 @@ const Offers = () => {
               </h1>
             </div>
             <p className="text-xl md:text-2xl text-pink-100 leading-relaxed">
-              Save more on your travels with our exclusive deals and promotions
+              Save more on your travels with NaijaBus Express exclusive deals and promotions
             </p>
           </div>
         </div>
@@ -157,26 +157,6 @@ const Offers = () => {
                       <span className={`font-semibold text-${colorScheme}-600 dark:text-${colorScheme}-400`}>
                         {offer.validTill}
                       </span>
-                    </div>
-                  </div>
-
-                  {/* Routes */}
-                  <div className="mb-4">
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Valid Routes:</div>
-                    <div className="flex flex-wrap gap-1">
-                      {offer.routes.slice(0, 2).map((route, idx) => (
-                        <span
-                          key={idx}
-                          className={`text-xs bg-${colorScheme}-100 dark:bg-${colorScheme}-900/20 text-${colorScheme}-700 dark:text-${colorScheme}-300 px-2 py-1 rounded-full`}
-                        >
-                          {route}
-                        </span>
-                      ))}
-                      {offer.routes.length > 2 && (
-                        <span className="text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 px-2 py-1 rounded-full">
-                          +{offer.routes.length - 2} more
-                        </span>
-                      )}
                     </div>
                   </div>
 

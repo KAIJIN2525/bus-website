@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { FaStar } from 'react-icons/fa6'
-import { nigerianBuses, nigerianBusCompanies, formatNairaPrice, pickupPoints } from '../../data/nigerianBusData'
+import { companyBuses, companyInfo, formatNairaPrice, getRandomTerminals } from '../../data/nigerianBusData'
 import Destination from '../../components/Destination/Destination'
 import DepartTime from '../../components/DepartTime/DepartTime'
 import BusSeatLayout from '../../components/Seat/Seat'
@@ -13,7 +13,6 @@ const Details = () => {
     
     const { id } = useParams(); // Get bus Id
     const [ bus, setBus ] = useState(null); //State for the bus details
-    const [ company, setCompany ] = useState(null); //State for the company details
     const [loading, setLoading ] = useState(true); //State for loading 
     const { selectedSeats, totalPrice } = useSeatContext(); 
     const { fromTo } = useSeatContext();
@@ -22,11 +21,9 @@ const Details = () => {
 
     useEffect(() => {
         const fetchBusDetails = () =>{
-            const foundBus = nigerianBuses.find(bus => bus.id === parseInt(id));
-            const foundCompany = foundBus ? nigerianBusCompanies.find(c => c.id === foundBus.companyId) : null;
+            const foundBus = companyBuses.find(bus => bus.id === parseInt(id));
             setTimeout(() => {
                 setBus(foundBus);
-                setCompany(foundCompany);
                 setLoading(false);
             }, 1000); // Find the bus by ID
         };
@@ -99,7 +96,7 @@ const Details = () => {
                         {bus.category}
                     </span>
                     <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
-                        {bus.company}
+                        {companyInfo.name}
                     </span>
                 </div>
                 <h1 className="text-4xl font-bold mb-2">{bus.name}</h1>
@@ -135,13 +132,11 @@ const Details = () => {
                             <h3 className="font-semibold text-neutral-700 dark:text-neutral-300 mb-3">Company Details</h3>
                             <div className="space-y-2">
                                 <div className="text-lg font-bold text-neutral-800 dark:text-neutral-100">
-                                    {bus.company}
+                                    {companyInfo.name}
                                 </div>
-                                {company && (
-                                    <div className="text-sm text-neutral-600 dark:text-neutral-400">
-                                        Established {company.established} • {company.fleet_size} buses
-                                    </div>
-                                )}
+                                <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                                    Established {companyInfo.established} • {companyInfo.fleet_size} buses
+                                </div>
                             </div>
                         </div>
                         
@@ -186,25 +181,11 @@ const Details = () => {
                         </div>
                     </div>
 
-                    {/* Routes */}
-                    <div>
-                        <h3 className="font-semibold text-neutral-700 dark:text-neutral-300 mb-3">Available Routes</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {bus.routes.map((route, idx) => (
-                                <div key={idx} className="p-3 bg-neutral-50 dark:bg-neutral-800/60 rounded-lg">
-                                    <span className="font-medium text-neutral-800 dark:text-neutral-100">{route}</span>
-                                </div>
-                            ))}
-                        </div>
+                    <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400 italic">
+                            {companyInfo.description}
+                        </p>
                     </div>
-
-                    {company && (
-                        <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400 italic">
-                                {company.description}
-                            </p>
-                        </div>
-                    )}
                 </div>
 
                 {/* Destination Selection */}

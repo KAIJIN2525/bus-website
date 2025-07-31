@@ -5,21 +5,34 @@ import {
   FaCalendarAlt,
   FaClock,
   FaUsers,
+  FaArrowRight,
 } from "react-icons/fa";
+import { popularRoutes } from "../../data/nigerianBusData";
 
-const locationsFrom = [
-  "New York, NY",
-  "Los Angeles, CA",
-  "Chicago, IL",
-  "Houston, TX",
-  "Phoenix, AZ",
+const nigerianCitiesFrom = [
+  "Lagos",
+  "Abuja",
+  "Kano",
+  "Ibadan",
+  "Port Harcourt",
+  "Benin City",
+  "Kaduna",
+  "Jos",
+  "Ilorin",
+  "Enugu",
 ];
-const locationsTo = [
-  "Miami, FL",
-  "Seattle, WA",
-  "Boston, MA",
-  "Denver, CO",
-  "Atlanta, GA",
+
+const nigerianCitiesTo = [
+  "Abuja",
+  "Lagos",
+  "Ibadan",
+  "Kano",
+  "Enugu",
+  "Calabar",
+  "Warri",
+  "Aba",
+  "Maiduguri",
+  "Sokoto",
 ];
 
 const Search = () => {
@@ -77,7 +90,7 @@ const Search = () => {
                 className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-50 dark:bg-neutral-800/60 px-4 h-14 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 <option value="">Select departure city</option>
-                {locationsFrom.map((loc) => (
+                {nigerianCitiesFrom.map((loc) => (
                   <option key={loc} value={loc}>
                     {loc}
                   </option>
@@ -101,7 +114,7 @@ const Search = () => {
                 className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-50 dark:bg-neutral-800/60 px-4 h-14 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 <option value="">Select destination city</option>
-                {locationsTo.map((loc) => (
+                {nigerianCitiesTo.map((loc) => (
                   <option key={loc} value={loc}>
                     {loc}
                   </option>
@@ -194,28 +207,27 @@ const Search = () => {
         {/* Quick Search Options */}
         <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-700">
           <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-4">
-            Popular Routes:
+            Quick Route Selection:
           </p>
           <div className="flex flex-wrap gap-3">
-            {[
-              "New York → Miami",
-              "Los Angeles → Seattle",
-              "Chicago → Denver",
-              "Houston → Atlanta",
-            ].map((route, index) => (
+            {popularRoutes.map((route, index) => (
               <button
                 key={index}
-                className="px-4 py-2 bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 rounded-full text-sm font-medium hover:bg-violet-100 dark:hover:bg-violet-900/30 transition-colors duration-300"
+                className="flex items-center gap-2 px-4 py-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-full text-sm font-medium hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-300 group"
                 onClick={() => {
-                  const [from, to] = route.split(" → ");
                   setForm((prev) => ({
                     ...prev,
-                    from: from + ", NY",
-                    to: to + ", FL",
+                    from: route.from,
+                    to: route.to,
                   }));
                 }}
               >
-                {route}
+                <span>{route.from}</span>
+                <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform duration-300" />
+                <span>{route.to}</span>
+                <span className="text-xs bg-green-200 dark:bg-green-800 px-2 py-0.5 rounded-full ml-2">
+                  {route.price}
+                </span>
               </button>
             ))}
           </div>

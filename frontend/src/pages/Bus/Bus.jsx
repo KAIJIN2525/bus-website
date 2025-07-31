@@ -8,7 +8,7 @@ import {
   FaSnowflake,
   FaUsers,
 } from "react-icons/fa";
-import { nigerianBuses, nigerianBusCompanies, formatNairaPrice } from "../../data/nigerianBusData";
+import { companyBuses, companyInfo, formatNairaPrice } from "../../data/nigerianBusData";
 
 const Bus = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,17 +37,15 @@ const Bus = () => {
   };
 
   // Filter and sort buses
-  let filteredBuses = nigerianBuses.filter((bus) => {
+  let filteredBuses = companyBuses.filter((bus) => {
     const matchesSearch = bus.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
     const matchesCategory =
       selectedCategory === "" ||
       bus.category.toLowerCase() === selectedCategory.toLowerCase();
-    const matchesCompany =
-      selectedCompany === "" ||
-      bus.company.toLowerCase() === selectedCompany.toLowerCase();
-    return matchesSearch && matchesCategory && matchesCompany;
+    // Remove company filter since it's a single company
+    return matchesSearch && matchesCategory;
   });
 
   // Sort buses
@@ -92,17 +90,25 @@ const Bus = () => {
     <div className="w-full lg:px-28 md:px-16 sm:px-7 px-4 mt-24 mb-16 min-h-screen">
       {/* Header */}
       <div className="text-center mb-12">
+        <div className="mb-6">
+          <div className="inline-flex items-center gap-3 bg-green-100 dark:bg-green-900/20 px-6 py-3 rounded-full mb-4">
+            <div className="w-8 h-4 bg-green-600 rounded flex items-center justify-center">
+              <span className="text-white font-bold text-xs">{companyInfo.shortName}</span>
+            </div>
+            <span className="text-green-700 dark:text-green-300 font-semibold">{companyInfo.name}</span>
+          </div>
+        </div>
         <h1 className="text-5xl font-bold text-neutral-800 dark:text-neutral-100 mb-4">
-          Nigerian Bus Services
+          Our Fleet
         </h1>
         <p className="text-xl text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto">
-          Choose from Nigeria's most trusted bus companies for comfortable, safe, and reliable intercity travel
+          {companyInfo.description}
         </p>
       </div>
 
       {/* Search and Filter */}
       <div className="w-full bg-white dark:bg-neutral-900/60 rounded-2xl px-6 md:px-8 py-8 mb-12 shadow-2xl border border-green-200/50 dark:border-green-800/50">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 items-end">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
           <div className="lg:col-span-1">
             <label className="block mb-3 font-semibold text-neutral-700 dark:text-neutral-300">
               Search Buses
@@ -110,7 +116,7 @@ const Bus = () => {
             <div className="relative">
               <input
                 type="text"
-                placeholder="Search by bus or company..."
+                placeholder="Search by bus name..."
                 value={searchTerm}
                 onChange={handleSearch}
                 className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-50 dark:bg-neutral-800/60 pl-12 pr-4 h-14 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-green-500 dark:focus:border-green-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300 shadow-sm hover:shadow-md"
@@ -132,26 +138,11 @@ const Bus = () => {
               <option value="">All Categories</option>
               <option value="Luxury">Luxury</option>
               <option value="VIP">VIP</option>
+              <option value="VIP">VIP</option>
               <option value="Express">Express</option>
               <option value="Standard">Standard</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block mb-3 font-semibold text-neutral-700 dark:text-neutral-300">
-              Company
-            </label>
-            <select
-              className="w-full appearance-none text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 bg-neutral-50 dark:bg-neutral-800/60 px-4 h-14 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-green-500 dark:focus:border-green-400 focus:bg-white dark:focus:bg-neutral-800 transition-all duration-300 shadow-sm hover:shadow-md"
-              value={selectedCompany}
-              onChange={handleCompanyChange}
-            >
-              <option value="">All Companies</option>
-              {nigerianBusCompanies.map((company) => (
-                <option key={company.id} value={company.name}>
-                  {company.name}
-                </option>
-              ))}
+              <option value="Economy">Economy</option>
+              <option value="Executive">Executive</option>
             </select>
           </div>
 
@@ -177,7 +168,6 @@ const Bus = () => {
               onClick={() => {
                 setSearchTerm("");
                 setSelectedCategory("");
-                setSelectedCompany("");
                 setSortBy("");
               }}
               className="w-full px-6 h-14 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3"
@@ -197,7 +187,6 @@ const Bus = () => {
             buses
             {searchTerm && ` for "${searchTerm}"`}
             {selectedCategory && ` in ${selectedCategory} category`}
-            {selectedCompany && ` from ${selectedCompany}`}
           </p>
         </div>
       </div>
@@ -207,7 +196,6 @@ const Bus = () => {
         {filteredBuses.length > 0 ? (
           filteredBuses.map((bus) => {
             const CategoryIcon = getCategoryIcon(bus.category);
-            const company = nigerianBusCompanies.find(c => c.id === bus.companyId);
             return (
               <Link
                 key={bus.id}
@@ -233,7 +221,7 @@ const Bus = () => {
                   <div className="absolute top-4 left-4">
                     <div className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm px-2 py-1 rounded-lg">
                       <span className="text-xs font-semibold text-neutral-800 dark:text-neutral-100">
-                        {bus.company}
+                        {companyInfo.shortName}
                       </span>
                     </div>
                   </div>
@@ -271,7 +259,7 @@ const Bus = () => {
                   </div>
 
                   {/* Features */}
-                  <div className="flex flex-wrap gap-1 mb-3">
+                  <div className="flex flex-wrap gap-1 mb-4">
                     {bus.features.slice(0, 3).map((feature, idx) => (
                       <span
                         key={idx}
@@ -282,23 +270,11 @@ const Bus = () => {
                     ))}
                   </div>
 
-                  {/* Routes */}
-                  <div className="mb-3">
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Popular Routes:</div>
-                    <div className="flex flex-wrap gap-1">
-                      {bus.routes.slice(0, 2).map((route, idx) => (
-                        <span
-                          key={idx}
-                          className="text-xs bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 px-2 py-1 rounded-full"
-                        >
-                          {route}
-                        </span>
-                      ))}
-                      {bus.routes.length > 2 && (
-                        <span className="text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 px-2 py-1 rounded-full">
-                          +{bus.routes.length - 2} more
-                        </span>
-                      )}
+                  {/* Amenities */}
+                  <div className="mb-4">
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Amenities:</div>
+                    <div className="text-xs text-neutral-600 dark:text-neutral-400">
+                      {bus.amenities.join(" • ")}
                     </div>
                   </div>
 
@@ -333,7 +309,6 @@ const Bus = () => {
               onClick={() => {
                 setSearchTerm("");
                 setSelectedCategory("");
-                setSelectedCompany("");
                 setSortBy("");
               }}
               className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors duration-300"
